@@ -22,12 +22,17 @@ import { cookies } from "next/headers"
 
 export async function getTokenFun(){
     try{
-        const cookie = await cookies()
-        const tokenCookie = cookie.get('next-auth.session-token') || cookie.get('__Secure-next-auth.session-token')
+        const cookieStore = await cookies()
         
+        // اطبعي كل أسماء الكوكيز المتاحة عشان نشوف اسمها الحقيقي على فيرسل
+        const allCookies = cookieStore.getAll()
+        console.log("AVAILABLE COOKIES:", allCookies.map(c => c.name))
+
+        const tokenCookie = cookieStore.get('next-auth.session-token') || cookieStore.get('__Secure-next-auth.session-token')
         const nextAuthToken = tokenCookie?.value
         
         if (!nextAuthToken) {
+            console.log("No token found in cookies!")
             return null;
         }
 
@@ -38,7 +43,7 @@ export async function getTokenFun(){
         return accessToken?.token
     }
     catch(error){
-        console.log('token error' , error)
+        console.log('token decoding error:', error)
         return null
     }
 }
