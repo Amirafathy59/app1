@@ -35,6 +35,8 @@ try {
     
     
 } catch (error) {
+    console.log('cart error' , error);
+    
 
     throw new Error('Unauthorized')
     
